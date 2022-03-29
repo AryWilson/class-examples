@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -48,6 +49,3 @@ void free(void *memory) {
 =======
   // Add memory free list
 >>>>>>> 8b9ce1f628b95c528a8e16039e4d134d7a5d7d1c
-  return;
-}
-
