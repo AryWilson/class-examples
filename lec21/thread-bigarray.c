@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
     tdata[i].start_index = i*subsize;
     tdata[i].end_index = (i+1)*subsize % 100000;
     tdata[i].array = data;
-    pthread_create(&thread_array[i], NULL, scalar_multiply, &tdata[i]);
+    pthread_create(&thread_array[i], NULL, scalar_multiply, &tdata[i]);//pointer to thread, attributes, function pointer, data address
   }
 
   /* Join all the threads. Main will pause in this loop until all threads

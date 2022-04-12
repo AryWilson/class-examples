@@ -22,6 +22,17 @@ int main(int argc, char *argv[]) {
     min = values[i] < min? values[i] : min;
     printf("%d\n", values[i]);
   }
+  
+  
+  
+//spawn 2 threads (less adn size)
+//use nthreads to compute min in an array
+//split task umung x number of threads
+//set up data to send it
+//compare retunr values
+
+
+
 
   printf("The min value is %d\n", min);
   free(values);
