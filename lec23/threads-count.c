@@ -5,16 +5,20 @@
 #include <pthread.h>
 
 static unsigned long long count = 0;
+pthread_mutex_t mutex;
 
 void *thread_count(void* args) {
   int myid, i;
   myid = *((int*) args); 
   printf("hello I'm thread %d with pthread_id %lu\n",
       myid, pthread_self());
- 
+  int localCount = 0; 
   for(i = 0; i < 100000; i++) {
-    count += 1;
+    localCount += 1;
   }
+  pthread_mutex_lock(&mutex);
+  count +=localCount;  
+  pthread_mutex_unlock(&mutex);
 
   printf("goodbye I'm thread %d\n",myid);
   return (void *)0;
@@ -31,10 +35,12 @@ int main(int argc, char *argv[]) {
   for (i = 0; i < 4; i++) {
     ids[i] = i;
     pthread_create(&threads[i], NULL, thread_count, &ids[i]); 
+    pthread_mutex_init(&mutex,NULL);
   }
 
   for (i = 0; i < 4; i++) {
     pthread_join(threads[i], NULL); 
+    pthread_mutex_destroy(&mutex);
   }
   printf("count = %llu\n", count);
 
