@@ -5,6 +5,7 @@
 struct thread_data {
   FILE* fp;
   int id;
+  
 };
 
 pthread_mutex_t mutex;
@@ -14,7 +15,22 @@ void *start(void* userdata) {
   struct thread_data* data = (struct thread_data*) userdata;
   int count = 0;
   char buffer[1024];
+  //char* line;
+  pthread_mutex_lock(&mutex);
+  char* line = fgets(buffer,1024,data->fp);
+  pthread_mutex_unlock(&mutex);
+  while(line!=NULL){ 
+      for(int i =0;buffer[i]!='\0';i++){
+        if(buffer[i]>='a' && buffer[i]<='z'){
+          count++;
+        }
+      }
+  }
 
+  pthread_mutex_lock(&mutex);
+  lettercount+=count;//shared resource 
+  pthread_mutex_unlock(&mutex);
+ 
   // todo
   return 0; 
 }
@@ -33,10 +49,12 @@ int main() {
     data[i].fp = fp;
     data[i].id = i;
     pthread_create(&threads[i], NULL, start, &data[i]); 
+    pthread_mutex_init(&mutex,NULL);
   }
 
   for (int i = 0; i < 4; i++) {
     pthread_join(threads[i], NULL); 
+    pthread_mutex_destroy(&mutex);
   }
   printf("count = %llu\n", lettercount);
   pthread_mutex_destroy(&mutex); 
